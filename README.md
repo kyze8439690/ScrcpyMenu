@@ -32,6 +32,18 @@ make run   # 构建并启动
 swift build -c release
 ```
 
+## 安装（直接下载）
+
+从 Releases 下载 zip 解压后，由于应用仅做了 ad-hoc 签名（未公证），首次运行需任选一种方式绕过 Gatekeeper：
+
+1. 右键 `ScrcpyMenu.app` → 打开 → 弹窗中点"打开"；
+2. 若提示"已损坏/无法验证开发者"，在终端执行：
+   ```bash
+   xattr -cr /path/to/ScrcpyMenu.app
+   ```
+   然后正常双击打开；
+3. 或在 系统设置 → 隐私与安全性 → 底部点"仍要打开"。
+
 ## 技术说明
 
 - 纯 Swift Package（executable target），无 Xcode 工程
