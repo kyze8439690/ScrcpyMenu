@@ -137,9 +137,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "dev"
         let alert = NSAlert()
         alert.messageText = "ScrcpyMenu"
-        alert.informativeText = "Version \(version)\n\nA menu bar GUI for scrcpy.\nhttps://github.com/kyze8439690/ScrcpyMenu"
+        alert.informativeText = "Version \(version)\n\nA menu bar GUI for scrcpy."
         alert.addButton(withTitle: "OK")
-        alert.runModal()
+        alert.addButton(withTitle: "View on GitHub")
+        if alert.runModal() == .alertSecondButtonReturn,
+           let url = URL(string: "https://github.com/kyze8439690/ScrcpyMenu") {
+            NSWorkspace.shared.open(url)
+        }
     }
 
     // MARK: - Alerts
