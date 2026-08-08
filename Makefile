@@ -2,8 +2,9 @@ APP_NAME := ScrcpyMenu
 APP_DIR := $(APP_NAME).app
 ICONSET_DIR := build/$(APP_NAME).iconset
 UNIVERSAL_BIN := build/$(APP_NAME)
+VERSION ?= dev
 
-.PHONY: build icon app run clean
+.PHONY: build icon app zip run clean
 
 build:
 	mkdir -p build
@@ -30,6 +31,9 @@ app: build
 
 run: app
 	open "$(APP_DIR)"
+
+zip: app
+	ditto -c -k --keepParent "$(APP_DIR)" "build/$(APP_NAME)-$(VERSION).zip"
 
 clean:
 	swift package clean
