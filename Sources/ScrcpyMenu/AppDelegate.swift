@@ -69,6 +69,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             return
         }
 
+        let header = NSMenuItem(title: "Devices", action: nil, keyEquivalent: "")
+        header.isEnabled = false
+        menu.addItem(header)
+
         if devices.isEmpty {
             let item = NSMenuItem(title: "No devices", action: nil, keyEquivalent: "")
             item.isEnabled = false
