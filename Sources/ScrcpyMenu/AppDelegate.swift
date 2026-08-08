@@ -100,6 +100,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu.addItem(makeItem("Refresh Devices", action: #selector(refreshDevices)))
         menu.addItem(makeItem("Open Logs Folder", action: #selector(openLogsFolder)))
         menu.addItem(.separator())
+        menu.addItem(makeItem("About ScrcpyMenu", action: #selector(showAbout)))
         menu.addItem(makeItem("Quit", action: #selector(quit)))
     }
 
@@ -130,6 +131,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     @objc private func quit() {
         NSApplication.shared.terminate(nil)
+    }
+
+    @objc private func showAbout() {
+        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "dev"
+        let alert = NSAlert()
+        alert.messageText = "ScrcpyMenu"
+        alert.informativeText = "Version \(version)\n\nA menu bar GUI for scrcpy.\nhttps://github.com/kyze8439690/ScrcpyMenu"
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
     }
 
     // MARK: - Alerts
