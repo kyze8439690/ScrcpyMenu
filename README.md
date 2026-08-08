@@ -49,3 +49,8 @@ swift build -c release
 - 纯 Swift Package（executable target），无 Xcode 工程
 - AppKit `NSStatusItem` + `NSMenu`，无第三方依赖
 - macOS 13+，Bundle ID: `com.yugy.scrcpy-menu`
+
+## 声明
+
+- 本项目仅为 [scrcpy](https://github.com/Genymobile/scrcpy) 的第三方图形界面封装，与 Genymobile 无任何隶属或官方合作关系。
+- scrcpy 版权归 Genymobile 所有，基于 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) 发布。

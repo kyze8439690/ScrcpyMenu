@@ -137,7 +137,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "dev"
         let alert = NSAlert()
         alert.messageText = "ScrcpyMenu"
-        alert.informativeText = "Version \(version)\n\nA menu bar GUI for scrcpy."
+        alert.informativeText = "Version \(version)\n\nAn unofficial menu bar GUI for scrcpy.\nscrcpy © Genymobile, licensed under Apache-2.0."
         alert.addButton(withTitle: "OK")
         alert.addButton(withTitle: "View on GitHub")
         if alert.runModal() == .alertSecondButtonReturn,
