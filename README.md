@@ -36,7 +36,7 @@ swift build -c release
 
 ## 安装（直接下载）
 
-从 [Releases](https://github.com/kyze8439690/ScrcpyMenu/releases/latest) 下载最新版本的 zip 解压后，由于应用仅做了 ad-hoc 签名（未公证），首次运行需任选一种方式绕过 Gatekeeper：
+从 [Releases](../../releases/latest) 下载最新版本的 zip 解压后，由于应用仅做了 ad-hoc 签名（未公证），首次运行需任选一种方式绕过 Gatekeeper：
 
 1. 右键 `ScrcpyMenu.app` → 打开 → 弹窗中点"打开"；
 2. 若提示"已损坏/无法验证开发者"，在终端执行：
