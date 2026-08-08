@@ -20,10 +20,7 @@ final class DeviceManager: @unchecked Sendable {
             let devices = Self.parseDevices(output)
             self.cachedDevices = devices
             Task { @MainActor in completion(devices) }
-            // devices 变化由 main 线程消费；marketname 异步补充
-            var devicesNeedingMarketName = devices.filter { $0.model == nil && $0.state.isUsable }
-            devicesNeedingMarketName = Array(devicesNeedingMarketName.prefix(3))
-            for device in devicesNeedingMarketName {
+            for device in devices.filter({ $0.model == nil && $0.state.isUsable }).prefix(3) {
                 if let name = self.fetchMarketName(serial: device.serial) {
                     self.enrich(serial: device.serial, model: name)
                 }
@@ -32,11 +29,9 @@ final class DeviceManager: @unchecked Sendable {
     }
 
     private func enrich(serial: String, model: String) {
-        queue.async { [self] in
-            guard let index = self.cachedDevices.firstIndex(where: { $0.serial == serial }) else { return }
-            let old = self.cachedDevices[index]
-            self.cachedDevices[index] = AndroidDevice(serial: old.serial, model: model, state: old.state)
-        }
+        guard let index = cachedDevices.firstIndex(where: { $0.serial == serial }) else { return }
+        let old = cachedDevices[index]
+        cachedDevices[index] = AndroidDevice(serial: old.serial, model: model, state: old.state)
     }
 
     private func fetchMarketName(serial: String) -> String? {

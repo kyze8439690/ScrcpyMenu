@@ -7,15 +7,9 @@ struct ScrcpyFailure {
 }
 
 final class ScrcpyManager: @unchecked Sendable {
-    private struct Instance {
-        let process: Process
-        let logURL: URL
-        let startTime: Date
-    }
-
     private let scrcpyPath: String
     private let adbPath: String
-    private var instances: [String: Instance] = [:]
+    private var processes: [String: Process] = [:]
     private let lock = NSLock()
 
     /// Called on main thread whenever a device starts or stops.
@@ -38,7 +32,7 @@ final class ScrcpyManager: @unchecked Sendable {
     func isRunning(serial: String) -> Bool {
         lock.lock()
         defer { lock.unlock() }
-        return instances[serial] != nil
+        return processes[serial] != nil
     }
 
     func toggle(device: AndroidDevice) {
@@ -51,7 +45,7 @@ final class ScrcpyManager: @unchecked Sendable {
 
     func start(device: AndroidDevice) {
         lock.lock()
-        guard instances[device.serial] == nil else {
+        guard processes[device.serial] == nil else {
             lock.unlock()
             return
         }
@@ -81,7 +75,7 @@ final class ScrcpyManager: @unchecked Sendable {
             try? logHandle.close()
             guard let self else { return }
             self.lock.lock()
-            self.instances.removeValue(forKey: serial)
+            self.processes.removeValue(forKey: serial)
             self.lock.unlock()
             let uptime = Date().timeIntervalSince(startTime)
             let exitCode = proc.terminationStatus
@@ -104,34 +98,34 @@ final class ScrcpyManager: @unchecked Sendable {
         }
 
         lock.lock()
-        instances[serial] = Instance(process: process, logURL: logURL, startTime: startTime)
+        processes[serial] = process
         lock.unlock()
         DispatchQueue.main.async { self.onStateChange?() }
     }
 
     func stop(serial: String) {
         lock.lock()
-        let instance = instances[serial]
+        let process = processes[serial]
         lock.unlock()
-        guard let instance, instance.process.isRunning else { return }
-        instance.process.terminate()
+        guard let process, process.isRunning else { return }
+        process.terminate()
     }
 
     func stopAll() {
         lock.lock()
-        let all = Array(instances.values)
+        let all = Array(processes.values)
         lock.unlock()
 
-        for instance in all where instance.process.isRunning {
-            instance.process.terminate()
+        for process in all where process.isRunning {
+            process.terminate()
         }
         let deadline = Date().addingTimeInterval(2)
         while Date() < deadline {
-            if all.allSatisfy({ !$0.process.isRunning }) { return }
+            if all.allSatisfy({ !$0.isRunning }) { return }
             Thread.sleep(forTimeInterval: 0.05)
         }
-        for instance in all where instance.process.isRunning {
-            kill(instance.process.processIdentifier, SIGKILL)
+        for process in all where process.isRunning {
+            kill(process.processIdentifier, SIGKILL)
         }
     }
 
