@@ -13,8 +13,8 @@ Agent 指南：ScrcpyMenu — macOS 菜单栏 scrcpy GUI 工具。
 | 命令 | 作用 |
 |---|---|
 | `make build` | 双架构（arm64 + x86_64）release 编译 + lipo 合并 → `build/ScrcpyMenu` |
-| `make app` | 打包 `ScrcpyMenu.app` 并 ad-hoc 签名（`codesign -s -`） |
-| `make zip VERSION=vX.Y.Z` | ditto 打包 release zip → `build/` |
+| `make app` | 打包**开发版** `ScrcpyMenu Dev.app`（橙色图标、bundle id `com.yugy.scrcpy-menu.dev`、ad-hoc 签名），与 Release 正式版并存区分 |
+| `make zip VERSION=vX.Y.Z` | DEV=0 打包正式版 `ScrcpyMenu.app` + ditto 打 release zip → `build/` |
 | `make icon` | 重新生成 `Resources/AppIcon.icns`（SF Symbol 程序化绘制） |
 | `make run` | 构建并启动 |
 | `make clean` | 清理 `.build`、`build/`、`ScrcpyMenu.app` |

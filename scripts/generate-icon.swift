@@ -1,6 +1,20 @@
 import AppKit
 
 let outputDir = CommandLine.arguments.count > 1 ? CommandLine.arguments[1] : "ScrcpyMenu.iconset"
+let variant = CommandLine.arguments.count > 2 ? CommandLine.arguments[2] : "release"
+
+let gradientColors: [NSColor]
+if variant == "dev" {
+    gradientColors = [
+        NSColor(calibratedRed: 1.00, green: 0.66, blue: 0.20, alpha: 1),
+        NSColor(calibratedRed: 0.85, green: 0.38, blue: 0.05, alpha: 1),
+    ]
+} else {
+    gradientColors = [
+        NSColor(calibratedRed: 0.24, green: 0.58, blue: 1.00, alpha: 1),
+        NSColor(calibratedRed: 0.04, green: 0.34, blue: 0.85, alpha: 1),
+    ]
+}
 
 let entries: [(name: String, pixels: Int)] = [
     ("icon_16x16", 16),
@@ -22,10 +36,7 @@ func render(pixels: Int) -> Data? {
         let iconRect = rect.insetBy(dx: inset, dy: inset)
         let radius = iconRect.width * 0.225
         let path = NSBezierPath(roundedRect: iconRect, xRadius: radius, yRadius: radius)
-        let gradient = NSGradient(colors: [
-            NSColor(calibratedRed: 0.24, green: 0.58, blue: 1.00, alpha: 1),
-            NSColor(calibratedRed: 0.04, green: 0.34, blue: 0.85, alpha: 1),
-        ])!
+        let gradient = NSGradient(colors: gradientColors)!
         gradient.draw(in: path, angle: -90)
 
         let config = NSImage.SymbolConfiguration(pointSize: iconRect.width * 0.52, weight: .medium)
