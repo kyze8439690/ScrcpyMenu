@@ -1,58 +1,60 @@
 # ScrcpyMenu
 
-macOS 菜单栏工具，作为 [scrcpy](https://github.com/Genymobile/scrcpy) 的轻量 GUI。点击右上角菜单栏图标，选择 Android 设备即可一键启动/停止 scrcpy 投屏窗口。
+A lightweight macOS menu bar GUI for [scrcpy](https://github.com/Genymobile/scrcpy). Click the menu bar icon and select an Android device to start/stop a scrcpy mirroring window in one click.
+
+[中文文档](README.zh-CN.md)
 
 ![screenshot](screenshot.png)
 
-## 功能
+## Features
 
-- 菜单栏常驻图标（SF Symbol，自适应深浅色模式）
-- 列出 `adb devices` 检测到的所有设备（含无线 adb 设备），显示 human-readable 设备名
-- 点击设备启动 scrcpy，再次点击停止；运行中设备带 ● 状态标记
-- 打开菜单时自动刷新设备列表，也可手动 Refresh
-- `unauthorized` / `offline` 设备置灰并标注状态
-- 启动失败时弹窗提示错误信息；每个 scrcpy 进程的输出写入 `~/Library/Logs/ScrcpyMenu/`
-- 退出应用时自动清理所有由本应用启动的 scrcpy 进程
-- 启动时检查 scrcpy / adb 依赖，缺失时给出安装提示
+- Persistent menu bar icon (SF Symbol, adapts to light/dark mode)
+- Lists all devices detected by `adb devices` (including wireless adb devices) with human-readable device names
+- Click a device to start scrcpy, click again to stop; running devices show a ● status indicator
+- Auto-refreshes the device list when the menu opens; manual Refresh also available
+- `unauthorized` / `offline` devices are grayed out with their status shown
+- Shows an alert with the error message when startup fails; each scrcpy process output is written to `~/Library/Logs/ScrcpyMenu/`
+- Automatically cleans up all scrcpy processes started by this app when quitting
+- Checks for scrcpy / adb dependencies on launch and shows installation instructions if missing
 
-## 依赖
+## Dependencies
 
 ```bash
 brew install scrcpy android-platform-tools
 ```
 
-## 构建与运行
+## Build & Run
 
 ```bash
-make app   # release 构建并打包 ScrcpyMenu.app（ad-hoc 签名）
-make run   # 构建并启动
+make app   # release build and package ScrcpyMenu.app (ad-hoc signed)
+make run   # build and launch
 ```
 
-或直接使用 SwiftPM：
+Or use SwiftPM directly:
 
 ```bash
 swift build -c release
 ```
 
-## 安装（直接下载）
+## Install (Direct Download)
 
-从 [Releases](../../releases/latest) 下载最新版本的 zip 解压后，由于应用仅做了 ad-hoc 签名（未公证），首次运行需任选一种方式绕过 Gatekeeper：
+Download the latest release zip from [Releases](../../releases/latest) and extract it. Since the app is only ad-hoc signed (not notarized), you need to bypass Gatekeeper on first launch using one of these methods:
 
-1. 右键 `ScrcpyMenu.app` → 打开 → 弹窗中点"打开"；
-2. 若提示"已损坏/无法验证开发者"，在终端执行：
+1. Right-click `ScrcpyMenu.app` → Open → click "Open" in the dialog;
+2. If prompted "damaged/unverified developer", run in Terminal:
    ```bash
    xattr -cr /path/to/ScrcpyMenu.app
    ```
-   然后正常双击打开；
-3. 或在 系统设置 → 隐私与安全性 → 底部点"仍要打开"。
+   Then double-click to open normally;
+3. Or go to System Settings → Privacy & Security → click "Open Anyway" at the bottom.
 
-## 技术说明
+## Technical Notes
 
-- 纯 Swift Package（executable target），无 Xcode 工程
-- AppKit `NSStatusItem` + `NSMenu`，无第三方依赖
-- macOS 13+，Bundle ID: `com.yugy.scrcpy-menu`
+- Pure Swift Package (executable target), no Xcode project
+- AppKit `NSStatusItem` + `NSMenu`, no third-party dependencies
+- macOS 13+, Bundle ID: `com.yugy.scrcpy-menu`
 
-## 声明
+## Disclaimer
 
-- 本项目仅为 [scrcpy](https://github.com/Genymobile/scrcpy) 的第三方图形界面封装，与 Genymobile 无任何隶属或官方合作关系。
-- scrcpy 版权归 Genymobile 所有，基于 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) 发布。
+- This project is only a third-party GUI wrapper for [scrcpy](https://github.com/Genymobile/scrcpy) and has no affiliation with or official relationship to Genymobile.
+- scrcpy is copyright Genymobile and is released under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
