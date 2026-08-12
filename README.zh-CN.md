@@ -1,5 +1,9 @@
 # ScrcpyMenu
 
+<p align="left">
+  <img src="Resources/AppIcon.png" alt="ScrcpyMenu icon" width="128">
+</p>
+
 macOS 菜单栏工具，作为 [scrcpy](https://github.com/Genymobile/scrcpy) 的轻量 GUI。点击右上角菜单栏图标，选择 Android 设备即可一键启动/停止 scrcpy 投屏窗口。
 
 [English](README.md)

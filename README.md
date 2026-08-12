@@ -1,5 +1,9 @@
 # ScrcpyMenu
 
+<p align="left">
+  <img src="Resources/AppIcon.png" alt="ScrcpyMenu icon" width="128">
+</p>
+
 A lightweight macOS menu bar GUI for [scrcpy](https://github.com/Genymobile/scrcpy). Click the menu bar icon and select an Android device to start/stop a scrcpy mirroring window in one click.
 
 [中文文档](README.zh-CN.md)
