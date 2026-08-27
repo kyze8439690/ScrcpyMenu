@@ -1,4 +1,5 @@
 import AppKit
+import ServiceManagement
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
@@ -103,6 +104,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu.addItem(.separator())
         menu.addItem(makeItem("Refresh Devices", action: #selector(refreshDevices)))
         menu.addItem(makeItem("Open Logs Folder", action: #selector(openLogsFolder)))
+        menu.addItem(makeLaunchAtLoginItem())
         menu.addItem(.separator())
         menu.addItem(makeItem("About ScrcpyMenu", action: #selector(showAbout)))
         menu.addItem(makeItem("Quit", action: #selector(quit)))
@@ -112,6 +114,17 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let item = NSMenuItem(title: title, action: action, keyEquivalent: "")
         item.target = self
         return item
+    }
+
+    private func makeLaunchAtLoginItem() -> NSMenuItem {
+        let item = NSMenuItem(title: "Launch at Login", action: #selector(toggleLaunchAtLogin(_:)), keyEquivalent: "")
+        item.target = self
+        item.state = launchAtLoginEnabled ? .on : .off
+        return item
+    }
+
+    private var launchAtLoginEnabled: Bool {
+        SMAppService.mainApp.status == .enabled
     }
 
     // MARK: - Actions
@@ -131,6 +144,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     @objc private func openLogsFolder() {
         NSWorkspace.shared.open(ScrcpyManager.logsDirectory)
+    }
+
+    @objc private func toggleLaunchAtLogin(_ sender: NSMenuItem) {
+        do {
+            if launchAtLoginEnabled {
+                try SMAppService.mainApp.unregister()
+            } else {
+                try SMAppService.mainApp.register()
+            }
+        } catch {
+            showLaunchAtLoginError(error)
+        }
+        rebuildMenu()
     }
 
     @objc private func quit() {
@@ -168,6 +194,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let alert = NSAlert()
         alert.messageText = "scrcpy failed to start"
         alert.informativeText = "Device: \(failure.serial)\nExit code: \(failure.exitCode)\n\n\(failure.outputTail)"
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+    }
+
+    private func showLaunchAtLoginError(_ error: Error) {
+        let alert = NSAlert()
+        alert.messageText = "Launch at Login Failed"
+        alert.informativeText = "\(error.localizedDescription)\n\nMake sure ScrcpyMenu is in /Applications."
         alert.alertStyle = .warning
         alert.addButton(withTitle: "OK")
         alert.runModal()
